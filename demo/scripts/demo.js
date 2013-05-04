@@ -1,15 +1,21 @@
 'use strict';
 
-angular.module('componentExampleApp', ['alchemy'])
+angular.module('componentDemo', ['alchemy'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/example.html',
-        controller: 'ExampleCtrl'
+        controller: 'onEnterController'
       })
       .otherwise({
         redirectTo: '/'
       });
   });
 
-function ExampleCtrl(){};
+angular.module('componentDemo').controller('onEnterController', function($scope) {
+    
+    $scope.keyPress = function(value) {
+        $scope.input = value;
+    };
+
+});

@@ -24,9 +24,9 @@ module.exports = function (grunt) {
   grunt.initConfig({
     yeoman: yeomanConfig,
     watch: {
-      compass: {
-        files: ['demo/styles/{,*/}*.{scss,sass}', 'component/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass']
+      less: {
+        files: ['demo/styles/{,*/}*.less', 'component/styles/{,*/}*.less'],
+        tasks: ['less:server']
       },
       templates: {
         files: ['component/templates/*.html', 'demo/views/*.html']
@@ -36,7 +36,6 @@ module.exports = function (grunt) {
           'demo/{,*/}*.html',
           'component/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
-          'demo/styles/{,*/}*.scss',
           'demo/scripts/{,*/}*.js',
           'component/scripts/{,*/}*.js',
           'demo/images/{,*/}*.{png,jpg,jpeg}'
@@ -79,7 +78,7 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      dist: ['.tmp', 'dist/*.js', 'dist/*.scss', 'dist/*.css'],
+      dist: ['.tmp', 'dist/*.js', 'dist/*.less', 'dist/*.css'],
       server: '.tmp'
     },
     jshint: {
@@ -102,26 +101,19 @@ module.exports = function (grunt) {
         browsers: ['PhantomJS', 'Firefox']
       }
     },
-    compass: {
+    less: {
       options: {
-        sassDir: './',
-        cssDir: '.tmp/styles',
-        imagesDir: 'demo/images',
-        javascriptsDir: 'demo/scripts',
-        fontsDir: 'demo/styles/fonts',
-        importPath: ['demo/components', 'component/styles'],
-        relativeAssets: true
+        paths: ['component/styles', 'demo/styles']
       },
       dist: {
         files: {
-          'dist/<%= yeoman.component %>.scss' : [
-            'component/styles/**/*.scss'
-          ]
+          'dist/normalize.css' : 'component/styles/normalize.less',
+          'dist/media_object.css' : 'component/styles/media_object.less'
         }
       },
       server: {
-        options: {
-          debugInfo: true
+        files : {
+          '.tmp/styles/demo.css' : 'demo/styles/demo.less'
         }
       }
     },
@@ -142,12 +134,6 @@ module.exports = function (grunt) {
           'dist/<%= yeoman.component %>.js': [
             '.tmp/templates/*.js', //must be first
             'component/scripts/**/*.js'
-          ],
-          'dist/media_object.css': [
-            '.tmp/styles/media_object.css'
-          ],
-          'dist/normalize.css': [
-            '.tmp/styles/normalize.css'
           ]
         }
       }
@@ -247,7 +233,7 @@ module.exports = function (grunt) {
           cwd: 'component/styles',
           dest: 'dist',
           src: [
-            './**/*.scss'
+            './**/*.less'
           ]
         }]
       }
@@ -367,7 +353,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
-    'compass:server',
+    'less:server',
     'ngtemplates',
     'livereload-start',
     'connect:livereload',
@@ -378,7 +364,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', function(arg1){
     var taskList = [
       'clean:server',
-      'compass',
+      'less',
       'ngtemplates',
       'connect:test'
     ];
@@ -396,7 +382,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'jshint',
     'test',
-    'compass:dist',
+    'less:dist',
     'ngtemplates',
     //'useminPrepare',
     //'imagemin',

@@ -1,3 +1,10 @@
-<div>
-  <h3>example-directive</h3>
+<div ng-controller="onEnterController">
+  <div>
+    <label>Enter text and hit Enter:</label>
+    <input type="text" on-enter="keyPress(value)" ng-model="value">
+  </div>
+  <div>
+    <label>Updated when you hit Enter:</label>
+    <span>{{ input }}</span>
+  </div>
 </div>
